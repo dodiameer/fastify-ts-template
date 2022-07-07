@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type CustomersTiersAndDetails {
+  active   Boolean?
+  benefits String[]
+  id       String?
+  tier     String?
+}
+
+type TransactionsTransactions {
+  amount           Int
+  date             DateTime @db.Date
+  price            String
+  symbol           String
+  total            String
+  transaction_code String
+}
+
+model Account {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  account_id Int
+  limit      Int
+  products   String[]
+
+  @@map("accounts")
+}
+
+model Customers {
+  id               String                    @id @default(auto()) @map("_id") @db.ObjectId
+  accounts         Int[]
+  active           Boolean?
+  address          String
+  birthdate        DateTime
+  email            String
+  name             String
+  tier_and_details CustomersTiersAndDetails?
+  username         String
+
+  @@map("customers")
+}
+
+model Transactions {
+  id                String                     @id @default(auto()) @map("_id") @db.ObjectId
+  account_id        Int
+  bucket_end_date   DateTime                   @db.Date
+  bucket_start_date DateTime                   @db.Date
+  transaction_count Int
+  transactions      TransactionsTransactions[]
+
+  @@map("transactions")
+}
